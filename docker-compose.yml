@@ -1,0 +1,25 @@
+version: "3"
+services:
+  code:
+    build: .
+    restart: always
+    environment:
+      PASSWORD: ${VSCODE_PASSWORD}
+      DEFAULT_WORKSPACE: /workspace
+      APP_PORT: ${APP_PORT}
+      CODER_PROXY_TRUSTED_ORIGINS: '*'
+    volumes:
+      - ./code/workspace:/workspace
+      - ./code/config/settings.json:/home/coder/.local/share/code-server/User/settings.json
+      - ./code/config/argv.json:/home/coder/.local/share/code-server/User/argv.json
+      - ./code/config/languagepacks.json:/home/coder/.local/share/code-server/languagepacks.json
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8085:80
+    environment:
+      CONTEXT_PATH: ${CONTEXT_PATH}
+      APP_PORT: ${APP_PORT}
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates

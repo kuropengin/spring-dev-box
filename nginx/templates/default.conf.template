@@ -1,0 +1,35 @@
+map $http_upgrade $connection_upgrade { 
+    default upgrade;
+    ''      close;
+} 
+
+upstream coder {
+    server code:8080;
+}
+
+server{
+    listen 80 default_server;
+    server_name _;
+
+    location /${CONTEXT_PATH}-coder/ {
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Allow-Methods *;
+        add_header Access-Control-Allow-Headers *;
+ 
+        # proxy_ssl_verify off;
+        proxy_set_header Host $host;
+        proxy_set_header Accept-Encoding gzip;
+        #proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Host $http_host;
+ 
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_http_version 1.1;
+
+        proxy_pass http://coder/;
+    }
+
+    location /${CONTEXT_PATH}-app/ {
+       proxy_pass http://code:${APP_PORT}/;
+    }
+ }
