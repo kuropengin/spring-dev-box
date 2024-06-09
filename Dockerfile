@@ -21,7 +21,14 @@ USER coder
 
 ENV VSCODE_USER /home/coder/.local/share/code-server/User
 RUN code-server --install-extension MS-CEINTL.vscode-language-pack-ja
-RUN code-server --install-extension vscjava.vscode-java-pack
+# 個別に取得
+# RUN code-server --install-extension vscjava.vscode-java-pack
+RUN code-server --install-extension redhat.java
+RUN code-server --install-extension vscjava.vscode-java-debug
+RUN code-server --install-extension vscjava.vscode-java-dependency
+RUN code-server --install-extension vscjava.vscode-java-test
+RUN code-server --install-extension vscjava.vscode-maven
+
 RUN code-server --install-extension redhat.vscode-yaml
 RUN code-server --install-extension vscjava.vscode-gradle@3.13.2024011802
 
