@@ -1,16 +1,26 @@
-FROM codercom/code-server:4.89.1-debian
+FROM redhat/ubi9
 
 USER root
-RUN apt update
-RUN apt install -y wget software-properties-common gnupg git
-RUN apt install -y wget apt-transport-https
-RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-RUN echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
-RUN apt update
-RUN apt install temurin-21-jdk -y
-RUN apt install -y maven
+RUN dnf update
+RUN dnf install -y wget git maven
+ENV DISTRIBUTION_NAME rhel
+RUN cat <<EOF > /etc/yum.repos.d/adoptium.repo
+[Adoptium]
+name=Adoptium
+baseurl=https://packages.adoptium.net/artifactory/rpm/${DISTRIBUTION_NAME:-$(. /etc/os-release; echo $ID)}/\$releasever/\$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.adoptium.net/artifactory/api/gpg/key/public
+EOF
+RUN dnf update
+RUN dnf install temurin-21-jdk -y
+
+RUN adduser --gecos '' --disabled-password coder \
+&& echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
 USER coder
+
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 ENV VSCODE_USER /home/coder/.local/share/code-server/User
 RUN code-server --install-extension MS-CEINTL.vscode-language-pack-ja
@@ -31,4 +41,26 @@ RUN code-server --install-extension mhutchie.git-graph
 RUN code-server --install-extension vmware.vscode-spring-boot
 RUN code-server --install-extension vscjava.vscode-spring-initializr
 RUN code-server --install-extension vscjava.vscode-spring-boot-dashboard
+RUN code-server --install-extension GabrielBB.vscode-lombok
+
+RUN code-server --install-extension akamud.vscode-theme-onedark
+RUN code-server --install-extension streetsidesoftware.code-spell-checker
+RUN code-server --install-extension mikestead.dotenv
+RUN code-server --install-extension usernamehw.commands
+RUN code-server --install-extension streetsidesoftware.code-spell-checker
+RUN code-server --install-extension yzane.markdown-pdf
+RUN code-server --install-extension zaaack.markdown-editor
+RUN code-server --install-extension hbenl.vscode-test-explorer
+RUN code-server --install-extension ms-playwright.playwright
+RUN code-server --install-extension eamodio.gitlens
+RUN code-server --install-extension xabikos.JavaScriptSnippets
+RUN code-server --install-extension dsznajder.es7-react-js-snippets
+RUN code-server --install-extension dbaeumer.vscode-eslint
+RUN code-server --install-extension formulahendry.code-runner
+RUN code-server --install-extension cweijan.vscode-mysql-client2
+RUN code-server --install-extension christian-kohler.path-intellisense
+
+
+WORKDIR /home/coder
+ENTRYPOINT ["code-server", "--bind-addr", "0.0.0.0:8080", "."]
 

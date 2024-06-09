@@ -13,6 +13,7 @@ services:
       - ./code/config/settings.json:/home/coder/.local/share/code-server/User/settings.json
       - ./code/config/argv.json:/home/coder/.local/share/code-server/User/argv.json
       - ./code/config/languagepacks.json:/home/coder/.local/share/code-server/languagepacks.json
+      - ./code/config/eclipse-java-style.xml:/home/coder/eclipse-java-style.xml
 
   nginx:
     image: nginx:latest
