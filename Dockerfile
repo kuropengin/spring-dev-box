@@ -14,13 +14,10 @@ gpgkey=https://packages.adoptium.net/artifactory/api/gpg/key/public
 EOF
 RUN dnf update
 RUN dnf install temurin-21-jdk -y
-
-RUN adduser --gecos '' --disabled-password coder \
-&& echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
-
-USER coder
-
 RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+RUN adduser coder
+USER coder
 
 ENV VSCODE_USER /home/coder/.local/share/code-server/User
 RUN code-server --install-extension MS-CEINTL.vscode-language-pack-ja
