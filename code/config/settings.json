@@ -1,0 +1,48 @@
+{
+    "workbench.colorTheme": "Atom One Dark",
+    "redhat.telemetry.enabled": true,
+    "files.exclude": {
+        "**/.git": false
+    },
+    "commands.commands": {
+        "Git": {
+            "nestedItems": {
+                "レポジトリのクローン": {
+                    "command": "git.clone",
+                    "icon": "clone"
+                },
+                "ユーザー情報登録": {
+                    "sequence": [
+                        {
+                            "command": "commands.runInTerminal",
+                            "args": {
+                                "text": "git config --global user.name ${input:gitUserName} && git config --global user.email ${input:gitEmail}",
+                                "name": "user.name",
+                                "reveal": true
+                            },
+                            "inputs": [
+                                {
+                                    "id": "gitUserName",
+                                    "type": "promptString",
+                                    "description": "ユーザー名",
+                                    "default": ""
+                                },
+                                {
+                                    "id": "gitEmail",
+                                    "type": "promptString",
+                                    "description": "メールアドレス",
+                                    "default": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "icon": "account"
+                }
+            }
+        }
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "java.format.settings.url": "/home/coder/eclipse-java-style.xml",
+    "java.format.settings.profile": "GoogleStyle",
+    "git.autofetch": true
+}
