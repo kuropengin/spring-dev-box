@@ -14,7 +14,9 @@ gpgkey=https://packages.adoptium.net/artifactory/api/gpg/key/public
 EOF
 RUN dnf update
 RUN dnf install temurin-21-jdk -y
-RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+ENV VSCODE_VERSION 4.23.1
+RUN curl -fsSL https://code-server.dev/install.sh | sh --version ${VSCODE_VERSION}
 
 RUN adduser coder
 USER coder
