@@ -1,7 +1,7 @@
 FROM redhat/ubi9
 
 USER root
-RUN dnf update
+RUN dnf update -y
 RUN dnf install -y wget git maven
 ENV DISTRIBUTION_NAME rhel
 RUN cat <<EOF > /etc/yum.repos.d/adoptium.repo
