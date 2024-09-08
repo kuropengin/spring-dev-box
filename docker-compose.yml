@@ -7,6 +7,7 @@ services:
       PASSWORD: ${VSCODE_PASSWORD}
       DEFAULT_WORKSPACE: /workspace
       APP_PORT: ${APP_PORT}
+      CONTEXT_PATH: ${CONTEXT_PATH}
       CODER_PROXY_TRUSTED_ORIGINS: '*'
     volumes:
       - ./code/workspace:/workspace

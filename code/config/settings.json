@@ -44,5 +44,9 @@
     "workbench.iconTheme": "vscode-icons",
     "java.format.settings.url": "/home/coder/eclipse-java-style.xml",
     "java.format.settings.profile": "GoogleStyle",
-    "git.autofetch": true
+    "git.autofetch": true,
+    "remote.autoForwardPortsSource": "hybrid",
+    "java.debug.settings.exceptionBreakpoint.skipClasses": [
+    
+    ]
 }

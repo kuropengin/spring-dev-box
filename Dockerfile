@@ -15,8 +15,7 @@ EOF
 RUN dnf update
 RUN dnf install temurin-21-jdk -y
 
-ENV VSCODE_VERSION 4.23.1
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version ${VSCODE_VERSION}
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 RUN adduser coder
 USER coder
@@ -32,7 +31,7 @@ RUN code-server --install-extension vscjava.vscode-java-test
 RUN code-server --install-extension vscjava.vscode-maven
 
 RUN code-server --install-extension redhat.vscode-yaml
-RUN code-server --install-extension vscjava.vscode-gradle@3.13.2024011802
+RUN code-server --install-extension vscjava.vscode-gradle
 
 RUN code-server --install-extension vscode-icons-team.vscode-icons
 RUN code-server --install-extension esbenp.prettier-vscode
@@ -53,7 +52,6 @@ RUN code-server --install-extension akamud.vscode-theme-onedark
 RUN code-server --install-extension streetsidesoftware.code-spell-checker
 RUN code-server --install-extension mikestead.dotenv
 RUN code-server --install-extension usernamehw.commands
-RUN code-server --install-extension streetsidesoftware.code-spell-checker
 RUN code-server --install-extension yzane.markdown-pdf
 RUN code-server --install-extension zaaack.markdown-editor
 RUN code-server --install-extension hbenl.vscode-test-explorer
@@ -66,6 +64,7 @@ RUN code-server --install-extension formulahendry.code-runner
 RUN code-server --install-extension cweijan.vscode-mysql-client2
 RUN code-server --install-extension christian-kohler.path-intellisense
 
+ENV JAVA_HOME /usr/lib/jvm/temurin-21-jdk
 
 WORKDIR /home/coder
 ENTRYPOINT ["code-server", "--bind-addr", "0.0.0.0:8080", "."]
