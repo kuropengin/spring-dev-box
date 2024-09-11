@@ -3,10 +3,6 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 } 
 
-upstream coder {
-    server spring-dev-box-code-1:8080;
-}
-
 server{
     listen 80 default_server;
     server_name _;
@@ -26,10 +22,18 @@ server{
         proxy_set_header Connection $connection_upgrade;
         proxy_http_version 1.1;
 
-        proxy_pass http://coder/;
+        proxy_pass http://code:8080/;
     }
 
     location /${CONTEXT_PATH}-app/ {
        proxy_pass http://code:${APP_PORT};
+    }
+
+    location /${CONTEXT_PATH}-pgadmin/ {
+       proxy_set_header X-Script-Name /${CONTEXT_PATH}-pgadmin;
+       proxy_set_header X-Scheme $scheme;
+       proxy_set_header Host $host;
+       proxy_redirect off;
+       proxy_pass http://pgadmin/;
     }
  }

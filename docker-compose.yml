@@ -3,6 +3,7 @@ services:
   code:
     build: .
     restart: always
+    container_name: code
     environment:
       PASSWORD: ${VSCODE_PASSWORD}
       DEFAULT_WORKSPACE: /workspace
@@ -19,6 +20,7 @@ services:
   nginx:
     image: nginx:latest
     restart: always
+    container_name: nginx
     ports:
       - 8085:80
     environment:
@@ -30,8 +32,17 @@ services:
   db:
     image: postgres:${POSTGRES_VERSION}
     restart: always
+    container_name: db
     environment:
-      - POSTGRES_USER=${USER_NAME}
-      - POSTGRES_PASSWORD=${USER_PASS}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
       - ./db:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
